@@ -3,7 +3,7 @@
   "include": ["**/src/**/*"],
   "exclude": ["**/node_modules", "**/dist"],
   "compilerOptions": {
-	"target": "ESNext", 
+    "target": "ESNext",
     "module": "ESNext",
     "strict": true,
     "exactOptionalPropertyTypes": true,

@@ -1,10 +1,10 @@
 {
   "name": "backend",
-  "type": "module",
   "version": "1.0.0",
   "description": "",
   "license": "ISC",
   "author": "",
+  "type": "module",
   "scripts": {
     "dev": "node --experimental-strip-types --watch-path=./src src/index.ts"
   },
@@ -12,6 +12,7 @@
     "argon2": "^0.44.0",
     "connect-pg-simple": "^10.0.0",
     "express": "^5.2.1",
+    "express-rate-limit": "^8.6.2",
     "express-session": "^1.19.0",
     "kysely": "^0.29.2",
     "passport": "^0.7.0",

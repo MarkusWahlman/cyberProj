@@ -18,7 +18,7 @@ const logger = {
   debug: (...args: unknown[]) => {
     // eslint-disable-next-line no-console
     console.debug(...args);
-  }
+  },
 };
 
 export default logger;

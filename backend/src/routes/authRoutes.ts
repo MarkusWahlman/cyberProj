@@ -3,7 +3,11 @@ import {
   register,
   login,
   logout,
-  adminOnly,
+  getAllUsers,
+  searchUsers,
+  forgotPassword,
+  resetPassword,
+  deleteAccount,
 } from "../controllers/authController.ts";
 import {
   localAuth,
@@ -16,22 +20,29 @@ import { registerSchema, loginSchema } from "shared";
 
 const router = StrictRouter();
 
-router.post(
-  "/register",
-  isPublic,
-  validate({ body: registerSchema }),
-  register,
-);
-router.post(
-  "/login",
-  validate({ body: loginSchema }),
-  lateAuth(localAuth),
-  login,
-);
+router.post("/register", isPublic, validate({ body: registerSchema }), register);
+
+// A07:2025 Authentication Failures - No rate limiting on login route
+// the fix:
+// import rateLimit from 'express-rate-limit';
+// const loginLimiter = rateLimit({ windowMs: 15 * 60 * 1000, max: 5 });
+// router.post("/login", loginLimiter, validate({ body: loginSchema }), lateAuth(localAuth), login);
+router.post("/login", validate({ body: loginSchema }), lateAuth(localAuth), login);
 router.post("/logout", isAuthenticated, noValidation, logout);
 
 // A01:2025 Broken Access Control - Admin role is not enforced.
-// the fix: router.get('/admin-only', requireRole('admin'), noValidation, adminOnly);
-router.get("/admin-only", isPublic, noValidation, adminOnly);
+// the fix: 
+// import {isAdmin } from "../middlewares/authMiddleware.ts";
+// router.get('/admin/users', isAuthenticated, isAdmin, noValidation, getAllUsers);
+router.get("/admin/users", isAuthenticated, noValidation, getAllUsers);
+
+router.get("/search", isPublic, noValidation, searchUsers);
+router.post("/forgot-password", isPublic, noValidation, forgotPassword);
+router.post("/reset-password", isPublic, noValidation, resetPassword);
+
+// CSRF Flaw - State changing action via GET request
+// the fix:
+// router.post('/delete-account', isAuthenticated, csrfProtection, deleteAccount);
+router.get("/delete-account", isAuthenticated, noValidation, deleteAccount);
 
 export default router;

@@ -1,7 +1,7 @@
 packages:
-  - 'frontend'
-  - 'backend'
-  - 'shared'
+  - "frontend"
+  - "backend"
+  - "shared"
 
 catalog:
   typescript: ^6.0.3

@@ -1,11 +1,12 @@
-import { Kysely, PostgresDialect, sql } from 'kysely';
-import pkg from 'pg';
+import { Kysely, PostgresDialect } from "kysely";
+import type { Generated, Selectable } from "kysely";
+import pkg from "pg";
 const { Pool } = pkg;
 
-export type Role = 'user' | 'admin';
+export type Role = "user" | "admin";
 
 export interface UserTable {
-  id: number;
+  id: Generated<number>;
   username: string;
   password_hash: string;
   role: Role;
@@ -17,7 +18,7 @@ export interface Database {
 
 declare global {
   namespace Express {
-    interface User extends UserTable {}
+    interface User extends Selectable<UserTable> {}
   }
 }
 
@@ -33,26 +34,26 @@ export const db = new Kysely<Database>({
 
 export async function initializeDb() {
   await db.schema
-    .createTable('users')
+    .createTable("users")
     .ifNotExists()
-    .addColumn('id', 'serial', (col) => col.primaryKey())
-    .addColumn('username', 'varchar(255)', (col) => col.notNull().unique())
-    .addColumn('password_hash', 'varchar(255)', (col) => col.notNull())
-    .addColumn('role', 'varchar(50)', (col) => col.notNull().defaultTo('user'))
+    .addColumn("id", "serial", (col) => col.primaryKey())
+    .addColumn("username", "varchar(255)", (col) => col.notNull().unique())
+    .addColumn("password_hash", "varchar(255)", (col) => col.notNull())
+    .addColumn("role", "varchar(50)", (col) => col.notNull().defaultTo("user"))
     .execute();
 
   await db.schema
-    .createTable('session')
+    .createTable("session")
     .ifNotExists()
-    .addColumn('sid', 'varchar', (col) => col.primaryKey())
-    .addColumn('sess', 'json', (col) => col.notNull())
-    .addColumn('expire', 'timestamp(6)', (col) => col.notNull())
+    .addColumn("sid", "varchar", (col) => col.primaryKey())
+    .addColumn("sess", "json", (col) => col.notNull())
+    .addColumn("expire", "timestamp(6)", (col) => col.notNull())
     .execute();
 
   await db.schema
-    .createIndex('IDX_session_expire')
+    .createIndex("IDX_session_expire")
     .ifNotExists()
-    .on('session')
-    .column('expire')
+    .on("session")
+    .column("expire")
     .execute();
 }
