@@ -26,7 +26,12 @@ router.post("/register", isPublic, validate({ body: registerSchema }), register)
 // A07:2025 Authentication Failures - No rate limiting on login route
 // the fix:
 // import rateLimit from 'express-rate-limit';
-// const loginLimiter = rateLimit({ windowMs: 15 * 60 * 1000, max: 5 });
+// const loginLimiter = rateLimit({
+//   windowMs: 15 * 60 * 1000,
+//   max: 5,
+//   keyGenerator: (req) => req.body.username ? String(req.body.username) : (req.ip || "unknown"),
+//   message: "Too many login attempts, please try again later"
+// });
 // router.post("/login", loginLimiter, validate({ body: loginSchema }), lateAuth(localAuth), login);
 router.post("/login", validate({ body: loginSchema }), lateAuth(localAuth), login);
 router.post("/logout", isAuthenticated, noValidation, logout);

