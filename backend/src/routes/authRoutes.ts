@@ -22,6 +22,7 @@ const router = StrictRouter();
 
 router.post("/register", isPublic, validate({ body: registerSchema }), register);
 
+// Flaw 1:
 // A07:2025 Authentication Failures - No rate limiting on login route
 // the fix:
 // import rateLimit from 'express-rate-limit';
@@ -30,6 +31,7 @@ router.post("/register", isPublic, validate({ body: registerSchema }), register)
 router.post("/login", validate({ body: loginSchema }), lateAuth(localAuth), login);
 router.post("/logout", isAuthenticated, noValidation, logout);
 
+// Flaw 2:
 // A01:2025 Broken Access Control - Admin role is not enforced.
 // the fix: 
 // import {isAdmin } from "../middlewares/authMiddleware.ts";
@@ -40,6 +42,7 @@ router.get("/search", isPublic, noValidation, searchUsers);
 router.post("/forgot-password", isPublic, noValidation, forgotPassword);
 router.post("/reset-password", isPublic, noValidation, resetPassword);
 
+// Flaw 5:
 // CSRF Flaw - State changing action via GET request
 // the fix:
 // router.post('/delete-account', isAuthenticated, csrfProtection, deleteAccount);

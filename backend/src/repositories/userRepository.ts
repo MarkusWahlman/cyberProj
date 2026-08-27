@@ -24,6 +24,7 @@ export const userRepository = {
   },
 
   searchUsers(query: string) {
+    // Flaw 4:
     // A05:2025 Injection - Using raw SQL string concatenation
     // the fix: 
     // return db.selectFrom('users').selectAll().where('username', 'like', `%${query}%`).execute();

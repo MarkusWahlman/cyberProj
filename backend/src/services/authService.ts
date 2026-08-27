@@ -46,6 +46,7 @@ export const authService = {
     const user = await userRepository.findByUsername(username);
     if (!user) return null;
 
+    // Flaw 3:
     // A04:2025 Cryptographic Failures - Predictable token using MD5 and current timestamp
     // (Divide by 1000 so the token stays the exact same for a 1000ms window)
     // the fix: 
