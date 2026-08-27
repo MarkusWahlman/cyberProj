@@ -1,0 +1,8 @@
+packages:
+  - 'frontend'
+  - 'backend'
+  - 'shared'
+
+catalog:
+  typescript: ^6.0.3
+  vite: ^8.1.0

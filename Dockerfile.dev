@@ -1,0 +1,26 @@
+# Dockerfile.dev
+FROM node:24-alpine
+
+# Enable corepack for pnpm
+ENV PNPM_HOME="/pnpm"
+ENV PATH="$PNPM_HOME:$PATH"
+RUN corepack enable
+
+WORKDIR /app
+
+# Step 1: Copy ONLY the package files first to leverage Docker layer caching
+COPY package.json pnpm-workspace.yaml pnpm-lock.yaml ./
+COPY frontend/package.json ./frontend/
+COPY backend/package.json ./backend/
+COPY shared/package.json ./shared/
+
+# Step 2: Install dependencies (this creates Linux-specific node_modules)
+RUN pnpm install
+
+# Step 3: Explicitly copy ONLY the workspace source directories
+COPY frontend/ ./frontend/
+COPY backend/ ./backend/
+COPY shared/ ./shared/
+
+# Step 4: Explicitly copy necessary root configuration files
+COPY tsconfig.base.json oxlint.config.ts ./
